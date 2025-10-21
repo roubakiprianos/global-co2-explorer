@@ -116,4 +116,4 @@ with col2:
         st.warning("Select one or more countries in the sidebar to view the time-series trend.")
 
 st.markdown("---")
-st.caption(f"Data source: Our World in Data (OWID). Showing data from {min_year} to {max_year}.")
+st.caption(f"**Developed by Rouba Kiprianos.** | Data source: Our World in Data (OWID). Showing data from {min_year} to {max_year}.")
