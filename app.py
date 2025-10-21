@@ -17,7 +17,7 @@ def load_data():
     
     # Clean data: drop rows missing CO2 emissions and select relevant columns
     df = df.dropna(subset=['co2', 'year', 'iso_code'])
-    df = df[['country', 'year', 'co2', 'iso_code']]
+    df = df[['country', 'year', 'co2', 'iso_code', 'population', 'gdp']]
     
     # Filter out global regions (e.g., World, Africa) to keep only individual countries
     regions_to_exclude = ['World', 'Asia', 'Europe', 'North America', 'South America', 'International transport', 'Micronesia (country)']
@@ -50,6 +50,19 @@ with st.sidebar:
         options=country_list,
         default=['United States', 'China', 'India']
     )
+    # Filter 3: Select Y-Axis Variable for Chart
+variable_options = {
+    "Annual CO₂ Emissions (Million Tonnes)": "co2",
+    "Population (Total)": "population",
+    "GDP (Total)": "gdp",
+}
+selected_variable_label = st.selectbox(
+    "Select Variable for Time-Series Y-Axis",
+    options=list(variable_options.keys()),
+    index=0 # Default to CO2
+)
+# Get the column name from the label
+selected_variable_column = variable_options[selected_variable_label]
 
 # --- 3. Apply Filters ---
 # Filter data for the map based on the selected year
@@ -82,18 +95,21 @@ with col1:
 
 
 with col2:
-    st.subheader("CO₂ Emissions Over Time")
+    st.subheader(f"{selected_variable_label} Over Time")
     
     if not line_chart_data.empty:
         # Create a Line Chart (Time-Series Visualization)
         fig_line = px.line(
             line_chart_data,
             x='year',               # X-axis is the year
-            y='co2',                # Y-axis is the CO2 value
+            y=selected_variable_column,  # Use the selected column name
             color='country',        # Use a different color for each country
-            title='Annual CO₂ Emissions Trend',
-            labels={'co2': 'CO₂ Emissions (Million Tonnes)', 'year': 'Year'}
-        )
+            title=f'{selected_variable_label} Trend',
+    labels={
+        selected_variable_column: selected_variable_label, # Use the full label for the axis
+        'year': 'Year'
+    }
+)
         fig_line.update_layout(height=450, margin={"r":0,"t":40,"l":0,"b":0})
         st.plotly_chart(fig_line, use_container_width=True)
     else:
