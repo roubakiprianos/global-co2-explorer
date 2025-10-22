@@ -17,7 +17,7 @@ def load_data():
     
     # Clean data: drop rows missing CO2 emissions and select relevant columns
     df = df.dropna(subset=['co2', 'co2_per_capita', 'year', 'iso_code'])
-    df = df[['country', 'year', 'co2', 'co2_per_capita', 'iso_code', 'population', 'gdp', 'co2_per_gdp', 'cumulative_co2', 'coal_co2', 'oil_co2', 'gas_co2']] 
+    df = df[['country', 'year', 'co2', 'co2_per_capita', 'iso_code', 'population', 'gdp', 'co2_per_gdp', 'cumulative_co2', 'coal_co2', 'oil_co2', 'gas_co2', 'share_global_co2']] 
     
     # Filter out global regions (e.g., World, Africa) to keep only individual countries
     regions_to_exclude = ['World', 'Asia', 'Europe', 'North America', 'South America', 'International transport', 'Micronesia (country)']
@@ -34,6 +34,9 @@ with st.sidebar:
         st.markdown("""
         **Total Annual CO2 Emissions:**
         The total amount of carbon dioxide (in million tonnes) emitted by a country from burning fossil fuels and cement production in a given year.
+        
+        **Share of Global CO₂ (%):**
+        A country's annual CO₂ emissions expressed as a percentage of the total global CO₂ emissions for that year. This highlights a country's current global responsibility and contribution to the overall problem.
 
         **CO2 Per Capita:**
         Total CO2 emissions divided by the country's population, showing the average emissions **per person** (in tonnes). This standardizes the data, revealing consumption patterns.
@@ -81,6 +84,7 @@ with st.sidebar:
         "Population (Total)": "population",
         "GDP (Total)": "gdp",
         "CO₂ Per GDP (Carbon Intensity)": "co2_per_gdp",
+        "Share of Global CO₂ (%)": "share_global_co2",
     }
     selected_variable_label = st.selectbox(
         "Select Variable for Time-Series Y-Axis",
