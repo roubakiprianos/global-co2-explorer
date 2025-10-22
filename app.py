@@ -37,7 +37,7 @@ with st.sidebar:
         ('Total Annual CO₂', 'CO₂ Per Capita'),
         horizontal=True
     )
-st.markdown("---") # Add a separator for clarity
+    st.markdown("---") # Add a separator for clarity
     
     # Filter 1: Year Slider
     min_year = int(data['year'].min())
@@ -119,7 +119,7 @@ with col2:
             y=selected_variable_column,  # Use the selected column name
             color='country',        # Use a different color for each country
             title=f'{selected_variable_label} Trend',
-    labels={
+        labels={
         selected_variable_column: selected_variable_label, # Use the full label for the axis
         'year': 'Year'
     }
