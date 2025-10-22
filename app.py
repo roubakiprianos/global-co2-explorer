@@ -17,7 +17,7 @@ def load_data():
     
     # Clean data: drop rows missing CO2 emissions and select relevant columns
     df = df.dropna(subset=['co2', 'co2_per_capita', 'year', 'iso_code'])
-    df = df[['country', 'year', 'co2', 'co2_per_capita', 'iso_code', 'population', 'gdp', 'co2_per_gdp']] 
+    df = df[['country', 'year', 'co2', 'co2_per_capita', 'iso_code', 'population', 'gdp', 'co2_per_gdp', 'cumulative_co2', 'coal_co2', 'oil_co2', 'gas_co2']] 
     
     # Filter out global regions (e.g., World, Africa) to keep only individual countries
     regions_to_exclude = ['World', 'Asia', 'Europe', 'North America', 'South America', 'International transport', 'Micronesia (country)']
@@ -41,8 +41,9 @@ with st.sidebar:
         **GDP (Total):**
         Gross Domestic Product (GDP) is the total monetary value of all the finished goods and services produced within a country's borders in a specific time period. It measures the country's economic size.
 
-        **Renewables Share of Energy (%):**
-The percentage of a country's total primary energy consumption that comes from renewable sources (like hydro, solar, wind, and biofuels) in that year.
+        **CO₂ from Coal/Oil/Gas:**
+        The amount of CO₂ emissions (in million tonnes) specifically resulting from the consumption of Coal, Oil, or Gas in a given year. These metrics show a country's reliance on specific fossil fuels.
+
 
         **Population:**
         The total number of people residing in the country in a given year.
@@ -147,5 +148,43 @@ with col2:
     else:
         st.warning("Select one or more countries in the sidebar to view the time-series trend.")
 
+# --- 5. Fossil Fuel Breakdown Visualization ---
 st.markdown("---")
+st.subheader("Fossil Fuel CO₂ Breakdown Over Time for Selected Countries")
+
+# Data preparation: select only the required columns and melt the DataFrame for Plotly
+melted_data = line_chart_data.melt(
+    id_vars=['country', 'year'],
+    value_vars=['coal_co2', 'oil_co2', 'gas_co2'],
+    var_name='Fuel Type',
+    value_name='CO2 Emissions (Million Tonnes)'
+)
+
+if not melted_data.empty:
+    # Create the Stacked Bar Chart
+    fig_bar = px.bar(
+        melted_data,
+        x='year',
+        y='CO2 Emissions (Million Tonnes)',
+        color='Fuel Type',
+        facet_col='country', # Create separate charts for each selected country
+        facet_col_wrap=3,    # Wrap charts after every 3 countries
+        title="Annual CO₂ Emissions by Fossil Fuel Source",
+        labels={
+            'CO2 Emissions (Million Tonnes)': 'CO₂ (Million Tonnes)',
+            'year': 'Year',
+            'country': 'Country'
+        }
+    )
+    # Tidy up the chart layout
+    fig_bar.update_layout(height=450, margin={"t":50, "b":0})
+    fig_bar.update_yaxes(matches=None) # Allow y-axes to scale independently for comparison
+
+    st.plotly_chart(fig_bar, use_container_width=True)
+else:
+    st.warning("Select countries in the sidebar to view the fossil fuel breakdown.")
+
+# Final caption remains at the bottom
+st.markdown("---")
+
 st.caption(f"**Developed by Rouba Kiprianos.** | Data source: Our World in Data (OWID). Showing data from {min_year} to {max_year}.")
