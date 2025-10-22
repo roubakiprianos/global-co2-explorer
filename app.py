@@ -30,7 +30,21 @@ data = load_data()
 # --- 2. Sidebar Filters ---
 with st.sidebar:
     st.header("Visualization Filters")
-    
+with st.expander("❓ Key Definitions & Metrics"):
+    st.markdown("""
+    **Total Annual $\text{CO}_2$ Emissions:**
+    The total amount of carbon dioxide (in million tonnes) emitted by a country from burning fossil fuels and cement production in a given year.
+
+    **$\text{CO}_2$ Per Capita:**
+    Total $\text{CO}_2$ emissions divided by the country's population, showing the average emissions **per person** (in tonnes). This standardizes the data, revealing consumption patterns.
+
+    **GDP (Total):**
+    Gross Domestic Product (GDP) is the total monetary value of all the finished goods and services produced within a country's borders in a specific time period. It measures the country's economic size.
+
+    **Population:**
+    The total number of people residing in the country in a given year.
+    """)
+st.markdown("---")    
     # New Filter 1: Comparison Mode Toggle
     comparison_mode = st.radio(
         "Select Comparison Mode",
