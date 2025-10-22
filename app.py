@@ -72,19 +72,19 @@ with st.sidebar:
         default=['United States', 'China', 'India']
     )
     # Filter 3: Select Y-Axis Variable for Chart
-variable_options = {
-    "Annual CO₂ Emissions (Million Tonnes)": "co2",
-    "Population (Total)": "population",
-    "GDP (Total)": "gdp",
-    "CO₂ Per GDP (Carbon Intensity)": "co2_per_gdp", 
-}
-selected_variable_label = st.selectbox(
-    "Select Variable for Time-Series Y-Axis",
-    options=list(variable_options.keys()),
-    index=0 # Default to CO2
-)
-# Get the column name from the label
-selected_variable_column = variable_options[selected_variable_label]
+    variable_options = {
+        "Annual CO₂ Emissions (Million Tonnes)": "co2",
+        "Population (Total)": "population",
+        "GDP (Total)": "gdp",
+        "CO₂ Per GDP (Carbon Intensity)": "co2_per_gdp", 
+    }
+    selected_variable_label = st.selectbox(
+        "Select Variable for Time-Series Y-Axis",
+        options=list(variable_options.keys()),
+        index=0 # Default to CO2
+    )
+    # Get the column name from the label
+    selected_variable_column = variable_options[selected_variable_label]
 
 # Set the dynamic variable based on the radio button choice
 if comparison_mode == 'Total Annual CO₂':
