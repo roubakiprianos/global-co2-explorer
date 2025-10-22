@@ -13,7 +13,7 @@ st.markdown("Visualize annual CO₂ emissions data (in million tonnes) by countr
 @st.cache_data
 def load_data():
     # Load the CSV you downloaded to your project folder
-    df = pd.read_csv('owid-co2-data.csv')
+    df = pd.read_csv('owid-co2-data.csv', encoding='latin-1')
     
     # Clean data: drop rows missing CO2 emissions and select relevant columns
     df = df.dropna(subset=['co2', 'co2_per_capita', 'year', 'iso_code'])
