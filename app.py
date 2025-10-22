@@ -13,12 +13,11 @@ st.markdown("Visualize annual CO₂ emissions data (in million tonnes) by countr
 @st.cache_data
 def load_data():
     # Load the CSV you downloaded to your project folder
-DATA_URL = 'https://raw.githubusercontent.com/owid/co2-data/master/owid-co2-data.csv'
-df = pd.read_csv(DATA_URL)
+    DATA_URL = 'https://raw.githubusercontent.com/owid/co2-data/master/owid-co2-data.csv' # <--- CORRECT: 4 SPACES INDENTED
+    df = pd.read_csv(DATA_URL) # <--- CORRECT: 4 SPACES INDENTED
     
     # Clean data: drop rows missing CO2 emissions and select relevant columns
     df = df.dropna(subset=['co2', 'co2_per_capita', 'year', 'iso_code'])
-    df = df[['country', 'year', 'co2', 'co2_per_capita', 'iso_code', 'population', 'gdp', 'co2_per_gdp', 'cumulative_co2', 'coal_co2', 'oil_co2', 'gas_co2', 'share_global_co2']] 
     
     # Filter out global regions (e.g., World, Africa) to keep only individual countries
     regions_to_exclude = ['World', 'Asia', 'Europe', 'North America', 'South America', 'International transport', 'Micronesia (country)']
