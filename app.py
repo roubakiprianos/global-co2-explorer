@@ -30,6 +30,14 @@ data = load_data()
 # --- 2. Sidebar Filters ---
 with st.sidebar:
     st.header("Visualization Filters")
+    
+    # New Filter 1: Comparison Mode Toggle
+comparison_mode = st.radio(
+    "Select Comparison Mode",
+    ('Total Annual CO₂', 'CO₂ Per Capita'),
+    horizontal=True
+)
+st.markdown("---") # Add a separator for clarity
 
     # Filter 1: Year Slider
     min_year = int(data['year'].min())
@@ -64,34 +72,41 @@ selected_variable_label = st.selectbox(
 # Get the column name from the label
 selected_variable_column = variable_options[selected_variable_label]
 
+# Set the dynamic variable based on the radio button choice
+if comparison_mode == 'Total Annual CO₂':
+    map_variable_column = 'co2'
+    map_variable_label = 'Total CO₂ (Million Tonnes)'
+    map_color_scale = px.colors.sequential.Reds
+else:
+    map_variable_column = 'co2_per_capita' # This column exists in the CSV
+    map_variable_label = 'CO₂ Per Capita (Tonnes)'
+    map_color_scale = px.colors.sequential.Plasma # Use a different color scale for visual distinction
+    
 # --- 3. Apply Filters ---
 # Filter data for the map based on the selected year
 map_data = data[data['year'] == selected_year]
 # Filter data for the line chart based on selected countries
 line_chart_data = data[data['country'].isin(selected_countries)]
 
+
 # --- 4. Visualizations ---
 col1, col2 = st.columns(2)
 
 with col1:
-    st.subheader(f"Global CO₂ Emissions in {selected_year}")
+    st.subheader(f"Global {map_variable_label} in {selected_year}")
     
     if not map_data.empty:
         # Create a Choropleth Map (Geospatial Visualization)
         fig_map = px.choropleth(
             map_data,
-            locations="iso_code",           # Use the ISO country code for mapping
-            color="co2",                    # Color based on CO2 emissions
-            hover_name="country",           # Show country name on hover
-            color_continuous_scale=px.colors.sequential.Reds, # Use a nice red color scale
-            title="Emissions (Million Tonnes)",
+            locations="iso_code",
+            color=map_variable_column,       # 2. Use the dynamic column
+            hover_name="country",
+            color_continuous_scale=map_color_scale, # 3. Use the dynamic color scale
+            title=map_variable_label,
         )
-        # Set map layout to focus on the world
-        fig_map.update_geos(fitbounds="locations", visible=False)
-        fig_map.update_layout(height=450, margin={"r":0,"t":40,"l":0,"b":0})
+        # ... (rest of the map code remains the same)
         st.plotly_chart(fig_map, use_container_width=True)
-    else:
-        st.warning(f"No CO₂ data available for the year {selected_year}.")
 
 
 with col2:
