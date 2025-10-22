@@ -32,17 +32,16 @@ with st.sidebar:
     st.header("Visualization Filters")
     
     # New Filter 1: Comparison Mode Toggle
-comparison_mode = st.radio(
-    "Select Comparison Mode",
-    ('Total Annual CO₂', 'CO₂ Per Capita'),
-    horizontal=True
-)
+    comparison_mode = st.radio(
+        "Select Comparison Mode",
+        ('Total Annual CO₂', 'CO₂ Per Capita'),
+        horizontal=True
+    )
 st.markdown("---") # Add a separator for clarity
-
+    
     # Filter 1: Year Slider
     min_year = int(data['year'].min())
-    max_year = int(data['year'].max())
-    
+    max_year = int(data['year'].max())  
     selected_year = st.slider(
         "Select Year for Map",
         min_value=min_year,
