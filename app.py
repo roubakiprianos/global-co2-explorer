@@ -16,8 +16,8 @@ def load_data():
     df = pd.read_csv('owid-co2-data.csv')
     
     # Clean data: drop rows missing CO2 emissions and select relevant columns
-    df = df.dropna(subset=['co2', 'year', 'iso_code'])
-    df = df[['country', 'year', 'co2', 'iso_code', 'population', 'gdp']]
+    df = df.dropna(subset=['co2', 'co2_per_capita', 'year', 'iso_code'])
+    df = df[['country', 'year', 'co2', 'co2_per_capita', 'iso_code', 'population', 'gdp']]
     
     # Filter out global regions (e.g., World, Africa) to keep only individual countries
     regions_to_exclude = ['World', 'Asia', 'Europe', 'North America', 'South America', 'International transport', 'Micronesia (country)']
