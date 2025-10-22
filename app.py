@@ -17,7 +17,7 @@ def load_data():
     
     # Clean data: drop rows missing CO2 emissions and select relevant columns
     df = df.dropna(subset=['co2', 'co2_per_capita', 'year', 'iso_code'])
-    df = df[['country', 'year', 'co2', 'co2_per_capita', 'iso_code', 'population', 'gdp', 'co2_per_gdp']] 
+    df = df[['country', 'year', 'co2', 'co2_per_capita', 'iso_code', 'population', 'gdp', 'co2_per_gdp', 'renewables_share_energy']] 
     
     # Filter out global regions (e.g., World, Africa) to keep only individual countries
     regions_to_exclude = ['World', 'Asia', 'Europe', 'North America', 'South America', 'International transport', 'Micronesia (country)']
@@ -40,6 +40,9 @@ with st.sidebar:
 
         **GDP (Total):**
         Gross Domestic Product (GDP) is the total monetary value of all the finished goods and services produced within a country's borders in a specific time period. It measures the country's economic size.
+
+        **Renewables Share of Energy (%):**
+The percentage of a country's total primary energy consumption that comes from renewable sources (like hydro, solar, wind, and biofuels) in that year.
 
         **Population:**
         The total number of people residing in the country in a given year.
@@ -76,7 +79,8 @@ with st.sidebar:
         "Annual CO₂ Emissions (Million Tonnes)": "co2",
         "Population (Total)": "population",
         "GDP (Total)": "gdp",
-        "CO₂ Per GDP (Carbon Intensity)": "co2_per_gdp", 
+        "CO₂ Per GDP (Carbon Intensity)": "co2_per_gdp",
+        "Renewables Share of Energy (%)": "renewables_share_energy",
     }
     selected_variable_label = st.selectbox(
         "Select Variable for Time-Series Y-Axis",
